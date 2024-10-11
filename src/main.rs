@@ -5,6 +5,10 @@ fn main() {
     let mut cmd = std::process::Command::new("qemu-system-x86_64");
     cmd.arg("-bios").arg(ovmf_prebuilt::ovmf_pure_efi());
     cmd.arg("-drive").arg(format!("format=raw,file={uefi_path}"));
+    cmd.arg("-accel").arg("kvm");
+//    cmd.arg("-no-reboot");
+//    cmd.arg("-d").arg("cpu_reset");
+//    cmd.arg("-s").arg("-S");
 
     let mut child = cmd.spawn().unwrap();
     child.wait().unwrap();
