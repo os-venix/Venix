@@ -10,7 +10,7 @@ fn main() {
     // create an UEFI disk image (optional)
     let uefi_path = out_dir.join("uefi.img");
     bootloader::DiskImageBuilder::new(kernel)
-	.set_file_contents(String::from("init"), b"This is the init file".to_vec())
+	.set_file_contents(String::from("init/init.txt"), b"This is the init file from a directory".to_vec())
 	.create_uefi_image(&uefi_path).unwrap();
 
     // pass the disk image paths as env variables to the `main.rs`
