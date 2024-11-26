@@ -7,8 +7,9 @@ fn main() {
     cmd.arg("-drive").arg(format!("format=raw,file={uefi_path}"));
     cmd.arg("-accel").arg("kvm");
 //    cmd.arg("-no-reboot");
-//    cmd.arg("-d").arg("cpu_reset");
-//    cmd.arg("-s").arg("-S");
+    cmd.arg("-d").arg("int,cpu_reset,guest_errors");
+    //    cmd.arg("-s").arg("-S");
+//    cmd.arg("-action").arg("reboot=shutdown,shutdown=pause");
 
     let mut child = cmd.spawn().unwrap();
     child.wait().unwrap();
