@@ -87,12 +87,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bootloader_api"
-version = "0.11.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a35ba5100c2431e20b924c8103c2cf8adb919ed9880f625e8770c3cb9d1b06aa"
-
-[[package]]
 name = "bytemuck"
 version = "1.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -440,11 +434,11 @@ dependencies = [
  "acpi",
  "aml",
  "bit_field",
- "bootloader_api",
  "conquer-once",
  "fixed",
  "itertools",
  "lazy_static",
+ "limine",
  "linked_list_allocator",
  "log",
  "noto-sans-mono-bitmap",
@@ -510,6 +504,15 @@ dependencies = [
  "libc",
  "pkg-config",
  "vcpkg",
+]
+
+[[package]]
+name = "limine"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9ca87cab008b8efeebdbe037cd4d1438037d48c5cb6fed939ffa5aa06315a321"
+dependencies = [
+ "bitflags 2.6.0",
 ]
 
 [[package]]
