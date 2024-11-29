@@ -11,6 +11,7 @@ fatfs = { version = "0.3", default-features = false, features = [
 ] }
 git2 = "0.19"
 kernel = { path = "kernel", artifact = "bin", target = "x86_64-unknown-none" }
+init = { path = "init", artifact = "bin", target = "x86_64-unknown-none" }
 tempfile = "3.3"
 gpt = "3.0"
 
@@ -19,7 +20,7 @@ gpt = "3.0"
 ovmf-prebuilt = "0.1.0-alpha.1"
 
 [workspace]
-members = ["kernel"]
+members = [ "init","kernel"]
 
 [profile.dev]
 panic = "abort"

@@ -143,13 +143,15 @@ fn main() {
     // set by cargo's artifact dependency feature, see
     // https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#artifact-dependencies
     let kernel = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_KERNEL_kernel").unwrap());
+    let init = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_INIT_init").unwrap());
 
     let limine_conf = PathBuf::from(std::env::current_dir().unwrap()).join("limine.conf");
     let limine = PathBuf::from(std::env::current_dir().unwrap()).join("limine/BOOTX64.EFI");
 
+
     let mut files: BTreeMap<&str, File> = BTreeMap::new();
     files.insert("boot/kernel", File::open(kernel).expect("Unable to open kernel file"));
-//    files.insert("init/init.txt", FileDataSource::Data(b"This is the init file from a directory".to_vec()));
+    files.insert("init/init", File::open(init).expect("Unable to open init"));
     files.insert("efi/boot/bootx64.efi", File::open(limine).expect("Unable to open Limine file"));
     files.insert("boot/limine/limine.conf", File::open(limine_conf).expect("Unable to open Limine config file"));
 
