@@ -1,7 +1,6 @@
 #![no_std]
 #![no_main]
 
-use core::ffi::c_char;
 use core::panic::PanicInfo;
 
 #[panic_handler]
@@ -11,17 +10,16 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[no_mangle]
 extern "C" fn _start() {
-    const HELLO_PTR: *const c_char = {
-	const BYTES: &[u8] = b"Hellorld from an ELF file\0";
-	BYTES.as_ptr().cast()
-    };
+    const HELLO_PTR: &[u8] = b"Hellorld from an ELF file";
 
     unsafe {
 	core::arch::asm!(
 	    "syscall",
 
-	    in("rax") 1 as usize,
-	    in("rdx") HELLO_PTR,
+	    in("rax") 0 as usize,
+	    in("rsi") HELLO_PTR.as_ptr(),
+	    in("rdi") 1,
+	    in("rdx") HELLO_PTR.len(),
 	);
     }
 

@@ -8,9 +8,10 @@ use std::{
     path::{Path, PathBuf},
 };
 use tempfile::NamedTempFile;
+use walkdir::WalkDir;
 
 pub fn create_fat_filesystem(
-    files: BTreeMap<&str, File>,
+    files: BTreeMap<String, File>,
     out_fat_path: &Path,
     volume_label: [u8; 11]
 ) -> anyhow::Result<()> {
@@ -42,7 +43,7 @@ pub fn create_fat_filesystem(
 
     // copy files to file system    
     for (target_path_raw, mut source) in files {
-        let target_path = Path::new(target_path_raw);
+        let target_path = Path::new(&target_path_raw);
         // create parent directories
         let ancestors: Vec<_> = target_path.ancestors().skip(1).collect();
         for ancestor in ancestors.into_iter().rev().skip(1) {
@@ -57,7 +58,7 @@ pub fn create_fat_filesystem(
         }
 
         let mut new_file = root_dir
-            .create_file(target_path_raw)
+            .create_file(&target_path_raw)
             .with_context(|| format!("failed to create file at `{}`", target_path.display()))?;
         new_file.truncate().unwrap();
 
@@ -145,15 +146,22 @@ fn main() {
     let kernel = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_KERNEL_kernel").unwrap());
     let init = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_INIT_init").unwrap());
 
-    let limine_conf = PathBuf::from(std::env::current_dir().unwrap()).join("limine.conf");
-    let limine = PathBuf::from(std::env::current_dir().unwrap()).join("limine/BOOTX64.EFI");
+    let mut files: BTreeMap<String, File> = BTreeMap::new();
+    files.insert("boot/kernel".to_string(), File::open(kernel).expect("Unable to open kernel file"));
+    files.insert("init/init".to_string(), File::open(init).expect("Unable to open init"));
 
+    for entry in WalkDir::new("sysroot") {
+	let entry = entry.unwrap();
+	if !entry.file_type().is_file() {
+	    continue;
+	}
 
-    let mut files: BTreeMap<&str, File> = BTreeMap::new();
-    files.insert("boot/kernel", File::open(kernel).expect("Unable to open kernel file"));
-    files.insert("init/init", File::open(init).expect("Unable to open init"));
-    files.insert("efi/boot/bootx64.efi", File::open(limine).expect("Unable to open Limine file"));
-    files.insert("boot/limine/limine.conf", File::open(limine_conf).expect("Unable to open Limine config file"));
+	let path = entry.path().to_str().unwrap().strip_prefix("sysroot/").unwrap().to_string();
+
+	files.insert(
+	    path,
+	    File::open(entry.path()).expect(&format!("Unable to open {}", entry.path().display())));
+    }
 
     let uefi_path = out_dir.join("uefi.img");
 

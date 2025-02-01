@@ -14,6 +14,7 @@ kernel = { path = "kernel", artifact = "bin", target = "x86_64-unknown-none" }
 init = { path = "init", artifact = "bin", target = "x86_64-unknown-none" }
 tempfile = "3.3"
 gpt = "3.0"
+walkdir = "2.5"
 
 [dependencies]
 # used for UEFI booting in QEMU
