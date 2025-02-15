@@ -144,7 +144,8 @@ fn main() {
     // set by cargo's artifact dependency feature, see
     // https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#artifact-dependencies
     let kernel = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_KERNEL_kernel").unwrap());
-    let init = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_INIT_init").unwrap());
+    // let init = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_INIT_init").unwrap());
+    let init = PathBuf::from("tmpcinit/init");
 
     let mut files: BTreeMap<String, File> = BTreeMap::new();
     files.insert("boot/kernel".to_string(), File::open(kernel).expect("Unable to open kernel file"));

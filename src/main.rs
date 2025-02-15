@@ -8,8 +8,10 @@ fn main() {
     cmd.arg("-accel").arg("kvm");
 //    cmd.arg("-no-reboot");
     cmd.arg("-d").arg("int,page");
-    //    cmd.arg("-s").arg("-S");
-//    cmd.arg("-action").arg("reboot=shutdown,shutdown=pause");
+//    cmd.arg("-s").arg("-S");
+    cmd.arg("-action").arg("reboot=shutdown,shutdown=pause");
+
+    println!("{:?}", cmd);
 
     let mut child = cmd.spawn().unwrap();
     child.wait().unwrap();
