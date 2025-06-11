@@ -6,10 +6,12 @@ fn main() {
     cmd.arg("-bios").arg(ovmf_prebuilt::ovmf_pure_efi());
     cmd.arg("-drive").arg(format!("format=raw,file={uefi_path}"));
     cmd.arg("-accel").arg("kvm");
-//    cmd.arg("-no-reboot");
-    cmd.arg("-d").arg("int,page");
+    cmd.arg("-no-reboot");
+//    cmd.arg("-trace").arg("enable=usb*");
 //    cmd.arg("-s").arg("-S");
     cmd.arg("-action").arg("reboot=shutdown,shutdown=pause");
+    cmd.arg("-usb");
+    cmd.arg("-device").arg("usb-kbd,pcap=kb.pcap");
 
     println!("{:?}", cmd);
 

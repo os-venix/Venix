@@ -146,10 +146,12 @@ fn main() {
     let kernel = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_KERNEL_kernel").unwrap());
     // let init = PathBuf::from(std::env::var_os("CARGO_BIN_FILE_INIT_init").unwrap());
     let init = PathBuf::from("tmpcinit/init");
+    let test = PathBuf::from("tmpcinit/test");
 
     let mut files: BTreeMap<String, File> = BTreeMap::new();
     files.insert("boot/kernel".to_string(), File::open(kernel).expect("Unable to open kernel file"));
     files.insert("init/init".to_string(), File::open(init).expect("Unable to open init"));
+    files.insert("bin/test".to_string(), File::open(test).expect("Unable to open test"));
 
     for entry in WalkDir::new("sysroot") {
 	let entry = entry.unwrap();
