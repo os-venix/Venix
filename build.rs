@@ -11,17 +11,11 @@ use tempfile::NamedTempFile;
 use walkdir::WalkDir;
 
 pub fn create_fat_filesystem(
-    files: BTreeMap<String, File>,
+    files: BTreeMap<String, PathBuf>,
     out_fat_path: &Path,
     volume_label: [u8; 11]
 ) -> anyhow::Result<()> {
-    const MB: u64 = 1024 * 1024;
-
-    // calculate needed size
-    let mut needed_size = 0;
-    for source in files.values() {
-        needed_size += source.metadata()?.len();
-    }
+    const GB: u64 = 256 * 1024 * 1024;
 
     // create new filesystem image file at the given path and set its length
     let fat_file = fs::OpenOptions::new()
@@ -31,7 +25,7 @@ pub fn create_fat_filesystem(
         .truncate(true)
         .open(out_fat_path)
         .unwrap();
-    let fat_size_padded_and_rounded = ((needed_size + 1024 * 64 - 1) / MB + 1) * MB + MB;
+    let fat_size_padded_and_rounded = GB;
     fat_file.set_len(fat_size_padded_and_rounded).unwrap();
 
     // format the file system and open it
@@ -42,7 +36,8 @@ pub fn create_fat_filesystem(
     let root_dir = filesystem.root_dir();
 
     // copy files to file system    
-    for (target_path_raw, mut source) in files {
+    for (target_path_raw, source_path) in files {
+	let mut source = File::open(source_path.clone()).unwrap_or_else(|_| panic!("Unable to open {}", source_path.display()));
         let target_path = Path::new(&target_path_raw);
         // create parent directories
         let ancestors: Vec<_> = target_path.ancestors().skip(1).collect();
@@ -148,10 +143,10 @@ fn main() {
     let init = PathBuf::from("tmpcinit/init");
     let test = PathBuf::from("tmpcinit/test");
 
-    let mut files: BTreeMap<String, File> = BTreeMap::new();
-    files.insert("boot/kernel".to_string(), File::open(kernel).expect("Unable to open kernel file"));
-    files.insert("init/init".to_string(), File::open(init).expect("Unable to open init"));
-    files.insert("bin/test".to_string(), File::open(test).expect("Unable to open test"));
+    let mut files: BTreeMap<String, PathBuf> = BTreeMap::new();
+    files.insert("boot/kernel".to_string(), kernel);
+    files.insert("init/init".to_string(), init);
+    files.insert("bin/test".to_string(), test);
 
     for entry in WalkDir::new("sysroot") {
 	let entry = entry.unwrap();
@@ -161,9 +156,7 @@ fn main() {
 
 	let path = entry.path().to_str().unwrap().strip_prefix("sysroot/").unwrap().to_string();
 
-	files.insert(
-	    path,
-	    File::open(entry.path()).expect(&format!("Unable to open {}", entry.path().display())));
+	files.insert(path, entry.path().to_path_buf());
     }
 
     let uefi_path = out_dir.join("uefi.img");

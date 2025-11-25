@@ -7,6 +7,7 @@ fn main() {
     cmd.arg("-drive").arg(format!("format=raw,file={uefi_path}"));
     cmd.arg("-accel").arg("kvm");
     cmd.arg("-no-reboot");
+    cmd.arg("-m").arg("1024");
 //    cmd.arg("-trace").arg("enable=usb*");
 //    cmd.arg("-s").arg("-S");
     cmd.arg("-action").arg("reboot=shutdown,shutdown=pause");
