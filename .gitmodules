@@ -2,3 +2,9 @@
 	path = limine
 	url = https://github.com/limine-bootloader/limine.git
 	branch = v8.x-binary
+[submodule "cross/gcc"]
+	path = cross/gcc
+	url = git@github.com:CWood1/gcc.git
+[submodule "cross/binutils-gdb"]
+	path = cross/binutils-gdb
+	url = git@github.com:CWood1/binutils-gdb.git
