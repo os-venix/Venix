@@ -17,13 +17,14 @@ BUILD_TOOLS_PATH := $(shell echo `pwd`/build/tools)
 CROSS_DIRECTORY := $(shell echo `pwd`/cross)
 SW_DIRECTORY := $(shell echo `pwd`/sw)
 PATCHES_DIR := $(shell echo `pwd`/patches)
+ASSETS_DIR := $(shell echo `pwd`/assets)
 
 # GPT partition begins at LBA 2048
 OFFSET_BYTES := $(shell echo $$((2048 * 512)))
 
 QEMU := qemu-system-x86_64
 QEMU_ARGS := \
-    -bios /usr/share/OVMF/OVMF_CODE.fd \
+    -bios $(ASSETS_DIR)/OVMF_CODE.fd \
     -drive file=$(IMG),format=raw \
     -accel kvm \
     -no-reboot \
