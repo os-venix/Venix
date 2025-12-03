@@ -1,0 +1,27 @@
+diff --git a/Src/prototypes.h b/Src/prototypes.h
+index 3578482d0..c7e31430b 100644
+--- a/Src/prototypes.h
++++ b/Src/prototypes.h
+@@ -57,9 +57,7 @@ extern int tputs (TC_CONST char *cp, int affcnt, int (*outc) (int));
+  * Some systems that do have termcap headers nonetheless don't
+  * declare tgoto, so we detect if that is missing separately.
+  */
+-#ifdef TGOTO_PROTO_MISSING
+ char *tgoto(const char *cap, int col, int row);
+-#endif
+ 
+ /* MISSING PROTOTYPES FOR VARIOUS OPERATING SYSTEMS */
+ 
+diff --git a/config.sub b/config.sub
+index 973a2980a..7965ad12e 100755
+--- a/config.sub
++++ b/config.sub
+@@ -1366,7 +1366,7 @@ case $os in
+ 	     | skyos* | haiku* | rdos* | toppers* | drops* | es* \
+ 	     | onefs* | tirtos* | phoenix* | fuchsia* | redox* | bme* \
+ 	     | midnightbsd* | amdhsa* | unleashed* | emscripten* | wasi* \
+-	     | nsk* | powerunix* | genode*)
++	     | nsk* | powerunix* | genode* | venix* )
+ 	# Remember, each alternative MUST END IN *, to match a version number.
+ 		;;
+ 	qnx*)

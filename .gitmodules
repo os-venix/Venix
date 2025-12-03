@@ -14,3 +14,9 @@
 [submodule "cross/mlibc"]
 	path = cross/mlibc
 	url = git@github.com:os-venix/mlibc.git
+[submodule "sw/ncurses"]
+	path = sw/ncurses
+	url = https://github.com/mirror/ncurses.git
+[submodule "sw/zsh"]
+	path = sw/zsh
+	url = https://github.com/zsh-users/zsh.git

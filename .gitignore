@@ -1,4 +1,4 @@
 *~
 target/
-cross/
+cross/build*
 build/
