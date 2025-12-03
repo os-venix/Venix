@@ -8,3 +8,9 @@
 [submodule "cross/binutils-gdb"]
 	path = cross/binutils-gdb
 	url = git@github.com:os-venix/binutils-gdb.git
+[submodule "kernel"]
+	path = kernel
+	url = git@github.com:os-venix/kernel.git
+[submodule "cross/mlibc"]
+	path = cross/mlibc
+	url = git@github.com:os-venix/mlibc.git
