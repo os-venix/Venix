@@ -20,3 +20,6 @@
 [submodule "sw/zsh"]
 	path = sw/zsh
 	url = https://github.com/zsh-users/zsh.git
+[submodule "cross/rust"]
+	path = cross/rust
+	url = https://github.com/rust-lang/rust
