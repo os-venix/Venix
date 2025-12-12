@@ -23,3 +23,6 @@
 [submodule "cross/rust"]
 	path = cross/rust
 	url = https://github.com/rust-lang/rust
+[submodule "sw/init"]
+	path = sw/init
+	url = git@github.com:os-venix/init.git
