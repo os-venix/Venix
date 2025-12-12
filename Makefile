@@ -186,11 +186,26 @@ $(BUILD_ZSH_STAMP): $(BUILD_NCURSES_STAMP) $(GCC) $(BINUTILS) $(SYSROOT)
 		make install.modules
 	touch $@
 
+build-init: $(GCC) $(BINUTILS) $(SYSROOT)
+	@echo "=== Building init ==="
+	@mkdir -p $(BUILD_PROCESS_PATH)/build/init
+
+	@PATH=$(PATH):$(TOOLS) \
+		CC=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-gcc \
+		CXX=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-g++ \
+		AR=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ar \
+		RANLIB=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ranlib \
+		LD=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ld \
+		OUTDIR=$(SYSROOT)/usr/bin \
+		BUILDDIR=$(BUILD_PROCESS_PATH)/build/init \
+		SYSROOT=$(SYSROOT) \
+		make -C sw/init all
+
 ### ============================================================
 ### Create disk image + FAT32 partition + copy sysroot + kernel
 ### ============================================================
 
-$(IMG): $(SYSROOT) $(BUILD_ZSH_STAMP) build-kernel mlibc-lib
+$(IMG): $(SYSROOT) $(BUILD_ZSH_STAMP) build-kernel mlibc-lib build-init
 	@rm -f $(IMG) $(FAT)
 
 	@echo "=== Creating empty GPT disk image ==="
@@ -228,4 +243,4 @@ $(IMG): $(SYSROOT) $(BUILD_ZSH_STAMP) build-kernel mlibc-lib
 clean:
 	rm -rf build target
 
-.PHONY: all run build-kernel sysgen clean
+.PHONY: all run build-kernel sysgen clean build-init
