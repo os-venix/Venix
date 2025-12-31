@@ -18,6 +18,7 @@ CROSS_DIRECTORY := $(shell echo `pwd`/cross)
 SW_DIRECTORY := $(shell echo `pwd`/sw)
 PATCHES_DIR := $(shell echo `pwd`/patches)
 ASSETS_DIR := $(shell echo `pwd`/assets)
+PORTS_DIRECTORY := $(shell echo `pwd`/ports)
 
 # GPT partition begins at LBA 2048
 OFFSET_BYTES := $(shell echo $$((2048 * 512)))
@@ -146,14 +147,14 @@ $(BUILD_NCURSES_STAMP): $(GCC) $(BINUTILS) $(SYSROOT)
 	@echo "=== Building ncurses ==="
 	@mkdir -p $(BUILD_PROCESS_PATH)/build/ncurses
 
-	@PATH=$PATH:$(TOOLS) cd $(SW_DIRECTORY)/ncurses && \
+	@PATH=$PATH:$(TOOLS) cd $(PORTS_DIRECTORY)/ncurses && \
 		patch -p1 < $(PATCHES_DIR)/ncurses.patch && \
 		CC=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-gcc \
 		CXX=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-g++ \
 		AR=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ar \
 		RANLIB=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ranlib \
 		LD=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ld \
-		$(SW_DIRECTORY)/ncurses/configure \
+		$(PORTS_DIRECTORY)/ncurses/configure \
 			--prefix=$(SYSROOT)/usr \
 			--host=x86_64-linux \
 			--build=x86_64-unknown-venix \
@@ -166,15 +167,15 @@ $(BUILD_ZSH_STAMP): $(BUILD_NCURSES_STAMP) $(GCC) $(BINUTILS) $(SYSROOT)
 	@echo "=== Building zsh ==="
 	@mkdir -p $(BUILD_PROCESS_PATH)/build/zsh
 
-	@PATH=$PATH:$(TOOLS) cd $(SW_DIRECTORY)/zsh && \
+	@PATH=$PATH:$(TOOLS) cd $(PORTS_DIRECTORY)/zsh && \
 		patch -p1 < $(PATCHES_DIR)/zsh.patch && \
-		$(SW_DIRECTORY)/zsh/Util/preconfig && \
+		$(PORTS_DIRECTORY)/zsh/Util/preconfig && \
 		CC=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-gcc \
 		CXX=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-g++ \
 		AR=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ar \
 		RANLIB=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ranlib \
 		LD=$(BUILD_TOOLS_PATH)/bin/x86_64-unknown-venix-ld \
-		$(SW_DIRECTORY)/zsh/configure \
+		$(PORTS_DIRECTORY)/zsh/configure \
 			--with-sysroot=$(SYSROOT) \
 			--host=x86_64-linux \
 			--build=x86_64-venix \
